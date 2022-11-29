@@ -28,8 +28,10 @@ fun SecondScreen(
 
         val viewModel: SecondViewModel = hiltViewModel()
         val weatherInfo = viewModel.weather.collectAsState()
+        val composeWeatherInfo = viewModel.composeWeather
         Spacer(modifier = Modifier.height(20.dp))
-        when (weatherInfo.value) {
+        //when (weatherInfo.value) {} - In case of StateFlow
+        when (composeWeatherInfo) {
             SecondViewModel.WeatherState.Error -> {
                 Text(
                     text = "An error has occurred.",
@@ -41,13 +43,14 @@ fun SecondScreen(
                 CircularProgressIndicator(
                     color = MaterialTheme.colors.primary,
                     modifier = Modifier
-                        .scale(0.5f)
+                        .scale(0.3f)
                 )
             }
             is SecondViewModel.WeatherState.Success -> {
-                val list = (weatherInfo.value as SecondViewModel.WeatherState.Success)
+                // val list = (weatherInfo.value as SecondViewModel.WeatherState.Success)
                 Column {
-                    list.weatherItem.list.forEachIndexed { index, forecast ->
+                    // list.forEachIndexed {}
+                    composeWeatherInfo.weatherItem.list.forEachIndexed { index, forecast ->
                         WeatherItem(weatherItem = forecast, index = index)
                     }
                     Spacer(modifier = Modifier.height(20.dp))
@@ -70,7 +73,6 @@ fun SecondScreen(
                 }
             }
         }
-
     }
 }
 

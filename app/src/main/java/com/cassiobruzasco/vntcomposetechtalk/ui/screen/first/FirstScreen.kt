@@ -30,12 +30,14 @@ fun FirstScreen(
 
         /**
          * Here we can see that both StateFlow and MutableState work well and we can
-         * accomplish what we wanted to do, but with StateFlow we can take advantage
+         * accomplish what we wanted with both, but with StateFlow we can take advantage
          * of flow's operators such as zip, combine, map, filter, etc
          * also if we need to use savedStateHandle to preserve a state in case of
          * process death it's more straight forward with StateFlow
          * and for last it's more reusable because StateFlow is Compose free, which means
          * it doesn't need to be in compose to work
+         * For simple use consider using MutableState and for more complex operations use
+         * Flow and StateFlow
          */
         val composeRoll = viewModel.composeRoll
         val flowRoll = viewModel.roll.collectAsState()
