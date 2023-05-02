@@ -4,20 +4,18 @@ import com.cassiobruzasco.vntcomposetechtalk.BuildConfig
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.AirPollutionResponseModel
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.LocationResponseModel
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.WeatherResponseItem
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApi {
 
-    @GET("forecast/daily")
+    @GET("weather")
     suspend fun getWeather(
         @Query("lat") lat: String,
         @Query("lon") lon: String,
         @Query("mode") mode: String = "json",
         @Query("units") units: String = "metric",
-        @Query("cnt") count: Int,
         @Query("appid") apiKey: String = BuildConfig.weatherKey,
     ): Response<WeatherResponseItem>
 

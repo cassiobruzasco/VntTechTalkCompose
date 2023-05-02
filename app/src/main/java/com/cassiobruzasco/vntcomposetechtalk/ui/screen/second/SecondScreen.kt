@@ -2,28 +2,36 @@ package com.cassiobruzasco.vntcomposetechtalk.ui.screen.second
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.AirPollutionResponseModel
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.ComponentsModel
-import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.DayModel
-import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.TemperatureModel
-import com.cassiobruzasco.vntcomposetechtalk.ui.screen.component.NavigationButton
+import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.WeatherResponseItem
 
 @Composable
 fun SecondScreen(navController: NavController, roll: Int) {
@@ -56,8 +64,9 @@ fun SecondScreen(navController: NavController, roll: Int) {
             is SecondViewModel.WeatherState.Success -> {
                 val response = (weatherInfo as SecondViewModel.WeatherState.Success)
                 Column {
-                    response.weatherItem?.list?.forEachIndexed { index, forecast ->
-                        WeatherItem(weatherItem = forecast, index = index)
+
+                    response.weatherItem?.let {
+                        WeatherItem(weatherItem = it)
                     }
                     response.airPollution?.list?.get(0)?.let {
                         AirPollutionCard(it.components)
@@ -82,11 +91,7 @@ fun SecondScreen(navController: NavController, roll: Int) {
 }
 
 @Composable
-fun WeatherItem(
-    weatherItem: DayModel,
-    index: Int
-) {
-    val day = if (index == 0) "Today" else "Tomorrow"
+fun WeatherItem(weatherItem: WeatherResponseItem) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(PaddingValues(12.dp)),
@@ -100,9 +105,8 @@ fun WeatherItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "$day: ${
-                    weatherItem.temperature.day.toString().substringBefore(".")
-                }ºC\nHumidity: ${weatherItem.humidity}%",
+                text = "Today: ${weatherItem.main.temperature.toString().substringBefore(".")
+                }ºC\nHumidity: ${weatherItem.main.humidity}%",
                 fontSize = 25.sp,
             )
             Image(

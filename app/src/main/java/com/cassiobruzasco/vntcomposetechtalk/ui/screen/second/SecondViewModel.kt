@@ -1,18 +1,13 @@
 package com.cassiobruzasco.vntcomposetechtalk.ui.screen.second
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.AirPollutionResponseModel
-import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.CoordinateModel
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.WeatherResponseItem
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.repository.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
@@ -45,7 +40,7 @@ class SecondViewModel @Inject constructor(private val weatherRepository: Weather
     }
 
     private suspend fun getForecast(lat: String, lon: String) {
-        weatherRepository.getWeather(lat, lon, 2)
+        weatherRepository.getWeather(lat, lon)
             .zip(weatherRepository.getAirPollution(lat, lon)) { forecast, pollution ->
                 if (forecast.isSuccessful && pollution.isSuccessful) {
                     return@zip WeatherState.Success(forecast.body(), pollution.body())

@@ -13,13 +13,11 @@ class WeatherRepositoryImpl @Inject constructor(private val api: WeatherApi) : W
     override suspend fun getWeather(
         lat: String,
         lon: String,
-        count: Int
     ): Flow<Response<WeatherResponseItem>> = flow {
         emit(
             api.getWeather(
                 lat = lat,
                 lon = lon,
-                count = count
             )
         )
     }
