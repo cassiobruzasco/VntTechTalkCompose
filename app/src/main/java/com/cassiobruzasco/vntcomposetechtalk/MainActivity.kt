@@ -21,7 +21,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             VntComposeTechTalkTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "first_screen") {
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "first_screen"
+                ) {
                     composable("first_screen") {
                         FirstScreen(navController = navController)
                     }
@@ -33,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         val roll = remember {
                             it.arguments?.getInt("roll") ?: 0
                         }
-                        SecondScreen(navController = navController)
+                        SecondScreen(navController = navController, roll = roll)
                     }
                 }
             }

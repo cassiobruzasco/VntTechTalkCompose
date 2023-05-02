@@ -8,12 +8,15 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.cassiobruzasco.vntcomposetechtalk.R
 import com.cassiobruzasco.vntcomposetechtalk.ui.screen.component.NavigationButton
@@ -40,16 +43,16 @@ fun FirstScreen(
          * Flow and StateFlow
          */
         val composeRoll = viewModel.composeRoll
-        val flowRoll = viewModel.roll.collectAsState()
+        val flowRoll by viewModel.roll.collectAsStateWithLifecycle()
 
         Column {
             Spacer(modifier = Modifier.height(20.dp))
             Dice(roll = composeRoll)
-            Dice(roll = flowRoll.value)
+            Dice(roll = flowRoll)
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { viewModel.rollInUi() },
+                onClick = viewModel::rollInUi,
             ) {
                 Text(
                     text = "Roll",
@@ -58,7 +61,7 @@ fun FirstScreen(
             }
             NavigationButton(
                 navController = navController,
-                screen = "second_screen/$composeRoll",
+                screen = "second_screen/$flowRoll",
                 text = "Go to second screen"
             )
         }
@@ -83,8 +86,7 @@ fun Dice(
     Image(
         painter = painterResource(id = diceImage),
         contentDescription = "Dice",
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         alignment = Alignment.Center
     )
 }

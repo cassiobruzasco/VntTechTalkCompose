@@ -4,7 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlin.random.Random
 
@@ -18,8 +20,7 @@ class FirstViewModel: ViewModel() {
         private set
 
     fun rollInUi() {
-        val random = Random.nextInt(1, 7)
-        _roll.update { random }
-        composeRoll = random
+        _roll.update { Random.nextInt(1, 7) }
+        composeRoll = Random.nextInt(1, 7)
     }
 }
