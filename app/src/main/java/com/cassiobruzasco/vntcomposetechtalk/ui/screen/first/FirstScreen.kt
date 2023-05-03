@@ -1,6 +1,7 @@
 package com.cassiobruzasco.vntcomposetechtalk.ui.screen.first
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.cassiobruzasco.vntcomposetechtalk.R
 import com.cassiobruzasco.vntcomposetechtalk.ui.screen.component.NavigationButton
+import com.cassiobruzasco.vntcomposetechtalk.ui.theme.Purple700
 
 @Composable
 fun FirstScreen(
@@ -89,6 +92,7 @@ fun Dice(
         painter = painterResource(id = diceImage),
         contentDescription = "Dice",
         modifier = modifier.fillMaxWidth(),
-        alignment = Alignment.Center
+        alignment = Alignment.Center,
+        colorFilter = if (isSystemInDarkTheme()) ColorFilter.tint(Purple700) else null
     )
 }
