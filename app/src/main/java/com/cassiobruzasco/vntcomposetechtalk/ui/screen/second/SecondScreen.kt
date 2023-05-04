@@ -1,6 +1,5 @@
 package com.cassiobruzasco.vntcomposetechtalk.ui.screen.second
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,13 +33,11 @@ import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.ComponentsModel
 import com.cassiobruzasco.vntcomposetechtalk.data.remote.model.WeatherResponseItem
 
 @Composable
-fun SecondScreen(navController: NavController, roll: Int) {
+fun SecondScreen(navController: NavController) {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier.fillMaxSize()
     ) {
-        Log.d("SecondScreen", "Roll as a parameter: $roll")
-
         val viewModel: SecondViewModel = hiltViewModel()
         val weatherInfo by viewModel.weather.collectAsStateWithLifecycle()
 

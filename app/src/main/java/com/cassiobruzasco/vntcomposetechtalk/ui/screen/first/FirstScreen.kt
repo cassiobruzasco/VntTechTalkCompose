@@ -2,14 +2,14 @@ package com.cassiobruzasco.vntcomposetechtalk.ui.screen.first
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,10 +30,6 @@ import com.cassiobruzasco.vntcomposetechtalk.ui.theme.Purple700
 fun FirstScreen(
     navController: NavController
 ) {
-    Surface(
-        color = MaterialTheme.colors.background,
-        modifier = Modifier.fillMaxSize()
-    ) {
         val viewModel: FirstViewModel = hiltViewModel()
 
         /**
@@ -50,13 +46,22 @@ fun FirstScreen(
         val composeRoll = viewModel.composeRoll
         val flowRoll by viewModel.roll.collectAsStateWithLifecycle()
 
-        Column {
-            Spacer(modifier = Modifier.height(20.dp))
-            Dice(roll = composeRoll)
-            Dice(roll = flowRoll)
-            Spacer(modifier = Modifier.height(16.dp))
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Dice(roll = composeRoll)
+                Dice(roll = flowRoll)
+            }
             Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth()
+                    .padding(PaddingValues(20.dp)),
                 onClick = viewModel::rollInUi,
             ) {
                 Text(
@@ -66,18 +71,14 @@ fun FirstScreen(
             }
             NavigationButton(
                 navController = navController,
-                screen = "second_screen/$flowRoll",
-                text = "Go to second screen"
+                screen = "second_screen",
+                text = "Second screen"
             )
         }
-    }
 }
 
 @Composable
-fun Dice(
-    modifier: Modifier = Modifier,
-    roll: Int
-) {
+fun Dice(roll: Int) {
     val diceImage = when (roll) {
         1 -> R.drawable.icn_one
         2 -> R.drawable.icn_two
@@ -91,7 +92,6 @@ fun Dice(
     Image(
         painter = painterResource(id = diceImage),
         contentDescription = "Dice",
-        modifier = modifier.fillMaxWidth(),
         alignment = Alignment.Center,
         colorFilter = if (isSystemInDarkTheme()) ColorFilter.tint(Purple700) else null
     )
