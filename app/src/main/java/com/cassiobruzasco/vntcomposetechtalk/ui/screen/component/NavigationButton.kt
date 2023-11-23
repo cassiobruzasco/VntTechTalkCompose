@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun NavigationButton(
-    navController: NavController,
+    navController: NavController?,
     screen: String,
     text: String
 ) {
@@ -21,7 +21,7 @@ fun NavigationButton(
         modifier = Modifier
             .fillMaxWidth()
             .padding(PaddingValues(20.dp)),
-        onClick = { navController.navigate(screen) }
+        onClick = { navController?.navigate(screen) }
     ) {
         Text(
             text = text,

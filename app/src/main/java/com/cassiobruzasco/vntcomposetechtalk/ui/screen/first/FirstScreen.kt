@@ -11,27 +11,34 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.cassiobruzasco.vntcomposetechtalk.R
 import com.cassiobruzasco.vntcomposetechtalk.ui.screen.component.NavigationButton
 import com.cassiobruzasco.vntcomposetechtalk.ui.theme.Purple700
+import com.cassiobruzasco.vntcomposetechtalk.ui.theme.Theme
 
 @Composable
 fun FirstScreen(
-    navController: NavController
+    navController: NavHostController,
+    viewModel: FirstViewModel = hiltViewModel()
 ) {
-        val viewModel: FirstViewModel = hiltViewModel()
-
         /**
          * Here we can see that both StateFlow and MutableState work well and we can
          * accomplish what we wanted with both, but with StateFlow we can take advantage
@@ -46,8 +53,43 @@ fun FirstScreen(
         val composeRoll = viewModel.composeRoll
         val flowRoll by viewModel.roll.collectAsStateWithLifecycle()
 
+    FirstScreenContent(
+        navController,
+        composeRoll,
+        flowRoll,
+        viewModel::rollInUi
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FirstScreenContent(
+    navController: NavHostController?,
+    composeRoll: Int,
+    flowRoll: Int,
+    rollInUi: () -> Unit = {}
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    androidx.compose.material3.Text(
+                        text = "First Screen",
+                        fontSize = 25.sp,
+                        textAlign = TextAlign.Center
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Purple700,
+                    titleContentColor = Color.White
+                )
+            )
+        },
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Row(
@@ -62,7 +104,7 @@ fun FirstScreen(
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
                     .padding(PaddingValues(20.dp)),
-                onClick = viewModel::rollInUi,
+                onClick = rollInUi,
             ) {
                 Text(
                     text = "Roll",
@@ -72,13 +114,14 @@ fun FirstScreen(
             NavigationButton(
                 navController = navController,
                 screen = "second_screen",
-                text = "Second screen"
+                text = "Go to second screen"
             )
         }
+    }
 }
 
 @Composable
-fun Dice(roll: Int) {
+fun Dice(roll: Int = 0) {
     val diceImage = when (roll) {
         1 -> R.drawable.icn_one
         2 -> R.drawable.icn_two
@@ -95,4 +138,16 @@ fun Dice(roll: Int) {
         alignment = Alignment.Center,
         colorFilter = if (isSystemInDarkTheme()) ColorFilter.tint(Purple700) else null
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FirstScreenPreview() {
+    Theme {
+        FirstScreenContent(
+            navController = null,
+            composeRoll = 5,
+            flowRoll = 3
+        )
+    }
 }
